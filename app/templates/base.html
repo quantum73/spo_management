@@ -3,12 +3,13 @@
     <head>
         {% block head %}
             <meta charset="utf-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+            <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
 
             {% block styles %}
                 {{ bootstrap.load_css() }}
 
                 {% from 'bootstrap4/utils.html' import render_static %}
+                <link href="https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.css" rel="stylesheet" />
                 {{ render_static('css', 'css/base.css') }}
             {% endblock %}
 
@@ -28,6 +29,7 @@
         {% block scripts %}
             {{ bootstrap.load_js() }}
             <script src="{{ url_for('static', filename='js/jquery-3.6.1.slim.js') }}"></script>
+            <script src="https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.js"></script>
         {% endblock %}
     </body>
 </html>

@@ -6,97 +6,103 @@
 
 {% block page_content %}
 
-  {% from 'bootstrap4/form.html' import render_field, render_hidden_errors %}
-  <form method="post" action="" class="parameter_form" role="form">
-      {{ render_hidden_errors(parameters_from) }}
-      {{ render_field(parameters_from.scene, class="scene-select") }}
-      {{ render_field(parameters_from.title) }}
-      {{ render_field(parameters_from.sample_count) }}
-      {{ render_field(parameters_from.trajectory_type, class="trajectory-select") }}
+{% from 'bootstrap4/form.html' import render_field, render_hidden_errors %}
+<form method="post" action="" class="parameter_form" role="form">
+    {{ parameters_from.csrf_token }}
+    <div class="main-block">
+        {{ render_hidden_errors(parameters_from) }}
+        {{ render_field(parameters_from.scene, class="scene-select") }}
+        {{ render_field(parameters_from.title) }}
+        <div class="row-flex-div count-frequency-velocity">
+            {{ render_field(parameters_from.sample_count) }}
+            {{ render_field(parameters_from.frequency) }}
+            {{ render_field(parameters_from.velocity) }}
+        </div>
+        {{ render_field(parameters_from.trajectory_type, class="trajectory-select") }}
+    </div>
 
-      <div class="glyssade-block">
-          <div class="row-flex-div diameters">
-              {{ render_field(parameters_from.d_start) }}
-              {{ render_field(parameters_from.d_finish) }}
-          </div>
-          <div class="row-flex-div heights">
-              {{ render_field(parameters_from.h_start) }}
-              {{ render_field(parameters_from.h_finish) }}
-          </div>
-          <p style="font-weight: bold">Старт:</p>
-          <div class="row-flex-div start-target">
-              {{ render_field(parameters_from.start_x_target) }}
-              {{ render_field(parameters_from.start_y_target) }}
-              {{ render_field(parameters_from.start_z_target) }}
-          </div>
-          <p style="font-weight: bold">Финиш:</p>
-          <div class="row-flex-div finish-target">
-              {{ render_field(parameters_from.finish_x_target) }}
-              {{ render_field(parameters_from.finish_y_target) }}
-              {{ render_field(parameters_from.finish_z_target) }}
-          </div>
-      </div>
+    <div class="glyssade-block">
+        <div class="row-flex-div diameters-heights">
+            {{ render_field(parameters_from.d_start) }}
+            {{ render_field(parameters_from.d_finish) }}
+            {{ render_field(parameters_from.h_start) }}
+            {{ render_field(parameters_from.h_finish) }}
+        </div>
+        <p style="font-weight: bold">Старт:</p>
+        <div class="row-flex-div start-target">
+            {{ render_field(parameters_from.start_x_target) }}
+            {{ render_field(parameters_from.start_y_target) }}
+            {{ render_field(parameters_from.start_z_target) }}
+        </div>
+        <p style="font-weight: bold">Финиш:</p>
+        <div class="row-flex-div finish-target">
+            {{ render_field(parameters_from.finish_x_target) }}
+            {{ render_field(parameters_from.finish_y_target) }}
+            {{ render_field(parameters_from.finish_z_target) }}
+        </div>
+    </div>
 
-      <div class="ellipse-block">
-          <div class="row-flex-div heights">
-              {{ render_field(parameters_from.h_min) }}
-              {{ render_field(parameters_from.h_max) }}
-          </div>
-          <div class="row-flex-div radius-coords">
-              {{ render_field(parameters_from.r_x) }}
-              {{ render_field(parameters_from.r_y) }}
-              {{ render_field(parameters_from.r_z) }}
-          </div>
-          <p style="font-weight: bold">Точка интереса:</p>
-          <div class="row-flex-div target-dot">
-              {{ render_field(parameters_from.x_target) }}
-              {{ render_field(parameters_from.y_target) }}
-              {{ render_field(parameters_from.z_target) }}
-          </div>
-      </div>
+    <div class="ellipse-block">
+        <div class="row-flex-div heights">
+            {{ render_field(parameters_from.h_min) }}
+            {{ render_field(parameters_from.h_max) }}
+        </div>
+        <div class="row-flex-div radius-coords">
+            {{ render_field(parameters_from.r_x) }}
+            {{ render_field(parameters_from.r_y) }}
+            {{ render_field(parameters_from.r_z) }}
+        </div>
+        <p style="font-weight: bold">Точка интереса:</p>
+        <div class="row-flex-div target-dot">
+            {{ render_field(parameters_from.x_target) }}
+            {{ render_field(parameters_from.y_target) }}
+            {{ render_field(parameters_from.z_target) }}
+        </div>
+    </div>
 
-      <div class="sensors-block">
-            <p style="font-weight: bold">Сенсоры:</p>
-            <div class="sensor-buttons-container">
-                <div id="add-sensor-btn" class="btn btn-outline-success">Добавить</div>
-                <div id="remove-sensor-btn" class="btn btn-outline-danger">Удалить</div>
-            </div>
+    <div class="map-container">
+        <div id="map"></div>
+    </div>
 
-            {% for i in parameters_from.sensors %}
-                <hr>
-                <div class="sensor-row">
-                    <div class="row-flex-div name-and-ip">
-                        {{ render_field(i.sensor_name) }}
-                        {{ render_field(i.host) }}
-                        {{ render_field(i.port) }}
-                     </div>
-
-                    <div class="row-flex-div type-and-view">
-                        {{ render_field(i.sensor_type) }}
-                        {{ render_field(i.field_view) }}
-                    </div>
-
-                    <p style="margin-bottom: 10px;">Разрешение (пиксел):</p>
-                    <div class="row-flex-div resolution">
-                        {{ render_field(i.resolution_x) }}
-                        {{ render_field(i.resolution_y) }}
-                     </div>
-
-                    <p style="margin-bottom: 10px;">Размер (мм):</p>
-                    <div class="row-flex-div sizes">
-                        {{ render_field(i.size_x) }}
-                        {{ render_field(i.size_y) }}
-                     </div>
-                    <hr>
-                </div>
-            {% endfor %}
+    <div class="sensors-block">
+        <p style="font-weight: bold">Сенсоры:</p>
+        <div class="sensor-buttons-container">
+            <div id="add-sensor-btn" class="btn btn-success">Добавить</div>
+            <div id="remove-sensor-btn" class="btn btn-danger">Удалить</div>
         </div>
 
+        {% for i in parameters_from.sensors %}
+        <hr>
+        <div class="sensor-row">
+            <div class="row-flex-div name-and-ip">
+                {{ render_field(i.sensor_name) }}
+                {{ render_field(i.host) }}
+                {{ render_field(i.port) }}
+            </div>
 
-      {{ render_field(parameters_from.frequency) }}
-      {{ render_field(parameters_from.velocity) }}
-      {{ render_field(parameters_from.submit) }}
-  </form>
+            <div class="row-flex-div type-and-view">
+                {{ render_field(i.sensor_type) }}
+                {{ render_field(i.field_view) }}
+            </div>
+
+            <p style="margin-bottom: 10px;">Разрешение (пиксел):</p>
+            <div class="row-flex-div resolution">
+                {{ render_field(i.resolution_x) }}
+                {{ render_field(i.resolution_y) }}
+            </div>
+
+            <p style="margin-bottom: 10px;">Размер (мм):</p>
+            <div class="row-flex-div sizes">
+                {{ render_field(i.size_x) }}
+                {{ render_field(i.size_y) }}
+            </div>
+            <hr>
+        </div>
+        {% endfor %}
+    </div>
+
+    {{ render_field(parameters_from.submit) }}
+</form>
 
 {% endblock %}
 
@@ -104,4 +110,27 @@
     {{ super()}}
     <script src="{{ url_for('static', filename='js/check_trajectory.js') }}"></script>
     <script src="{{ url_for('static', filename='js/add_and_delete_sensors.js') }}"></script>
+    <script>
+        var map = new maplibregl.Map({
+            container: 'map',
+            style:
+                'https://api.maptiler.com/maps/streets/style.json?key=get_your_own_OpIi9ZULNHzrESv6T2vL',
+            center: [0, 0],
+            zoom: 2
+        });
+
+        var marker = new maplibregl.Marker({
+            draggable: true
+        })
+            .setLngLat([0, 0])
+            .addTo(map);
+
+        function onDragEnd() {
+            var lngLat = marker.getLngLat();
+            $( "#x_target" ).val( lngLat.lng );
+            $( "#y_target" ).val( lngLat.lat );
+        }
+
+        marker.on('dragend', onDragEnd);
+    </script>
 {% endblock %}

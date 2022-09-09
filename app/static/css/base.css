@@ -22,15 +22,11 @@
     align-items: center;
 }
 
-.diameters, .heights {
-    justify-content: flex-start;
+.diameters-heights {
+    justify-content: space-between;
 }
 
-.diameters .form-group:first-child, .heights .form-group:first-child {
-    margin-right: 22%;
-}
-
-.sensors-block, .ellipse-block, .glyssade-block {
+.main-block, .sensors-block, .ellipse-block, .glyssade-block, #map {
     margin: 20px 0;
     padding: 20px;
     border: 1px solid black;
@@ -75,4 +71,14 @@
 
 .sensor-row > p {
     margin: 0;
+}
+
+.map-container {
+    padding: 0;
+    margin: 20px 0;
+}
+
+#map {
+    height: 500px;
+    width: 100%;
 }
