@@ -6,3 +6,26 @@
 .my-navbar {
     justify-content: center;
 }
+
+.nav-link {
+    color: white;
+}
+
+.nav-link:hover {
+    color: greenyellow;
+}
+
+.row-flex-div {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.diameters, .heights {
+    justify-content: flex-start;
+}
+
+.diameters .form-group:first-child, .heights .form-group:first-child {
+    margin-right: 22%;
+}

@@ -6,7 +6,63 @@
 
 {% block page_content %}
 
-  {% from 'bootstrap4/form.html' import render_form %}
-  {{ render_form(parameters_from, extra_classes="some_form") }}
+  {% from 'bootstrap4/form.html' import render_field, render_hidden_errors %}
+  <form method="post" action="" class="parameter_form" role="form">
+      {{ render_hidden_errors(parameters_from) }}
+      {{ render_field(parameters_from.scene, class="scene-select") }}
+      {{ render_field(parameters_from.title) }}
+      {{ render_field(parameters_from.sample_count) }}
+      {{ render_field(parameters_from.trajectory_type, class="trajectory-select") }}
 
+      <div class="glyssade-block">
+          <div class="row-flex-div diameters">
+              {{ render_field(parameters_from.d_start) }}
+              {{ render_field(parameters_from.d_finish) }}
+          </div>
+          <div class="row-flex-div heights">
+              {{ render_field(parameters_from.h_start) }}
+              {{ render_field(parameters_from.h_finish) }}
+          </div>
+          <p style="font-weight: bold">Старт:</p>
+          <div class="row-flex-div start-target">
+              {{ render_field(parameters_from.start_x_target) }}
+              {{ render_field(parameters_from.start_y_target) }}
+              {{ render_field(parameters_from.start_z_target) }}
+          </div>
+          <p style="font-weight: bold">Финиш:</p>
+          <div class="row-flex-div finish-target">
+              {{ render_field(parameters_from.finish_x_target) }}
+              {{ render_field(parameters_from.finish_y_target) }}
+              {{ render_field(parameters_from.finish_z_target) }}
+          </div>
+      </div>
+
+      <div class="ellipse-block">
+          <div class="row-flex-div heights">
+              {{ render_field(parameters_from.h_min) }}
+              {{ render_field(parameters_from.h_max) }}
+          </div>
+          <div class="row-flex-div radius-coords">
+              {{ render_field(parameters_from.r_x) }}
+              {{ render_field(parameters_from.r_y) }}
+              {{ render_field(parameters_from.r_z) }}
+          </div>
+          <p style="font-weight: bold">Точка интереса:</p>
+          <div class="row-flex-div target-dot">
+              {{ render_field(parameters_from.x_target) }}
+              {{ render_field(parameters_from.y_target) }}
+              {{ render_field(parameters_from.z_target) }}
+          </div>
+      </div>
+
+      {{ render_field(parameters_from.frequency) }}
+      {{ render_field(parameters_from.velocity) }}
+      {{ render_field(parameters_from.submit) }}
+  </form>
+
+{% endblock %}
+
+{% block scripts %}
+    {{ super()}}
+    <script src="{{ url_for('static', filename='js/check_trajectory.js') }}"></script>
 {% endblock %}
