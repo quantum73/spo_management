@@ -1,8 +1,8 @@
 from enum import Enum
 
 from flask_wtf import FlaskForm
-from wtforms import StringField, FloatField, SubmitField, SelectField, IntegerField
-from wtforms.validators import DataRequired, NumberRange, Length, Optional
+from wtforms import StringField, FloatField, SubmitField, SelectField, IntegerField, FieldList, FormField
+from wtforms.validators import DataRequired, NumberRange, Length, Optional, IPAddress
 
 DEFAULT_Z = 10
 DEFAULT_SAMPLES_COUNT = 10
@@ -16,14 +16,38 @@ class SceneTypes(Enum):
     kaspiy = "Каспий"
 
 
+class SensorTypes(Enum):
+    IR = "IR"
+    TV = "TV"
+    RL = "RL"
+    JSON = "JSON"
+
+
 class Trajectory(Enum):
     glissade = "Глиссада"
     ellipse = "Эллипс"
 
 
+class SensorForm(FlaskForm):
+    sensor_name = StringField('Название:', validators=[DataRequired(), Length(min=3, max=64)])
+    sensor_type = SelectField(
+        'Тип сенсора:',
+        choices=[(s.name, s.value) for s in SensorTypes],
+        default=SensorTypes.IR.name,
+        validators=[DataRequired()],
+    )
+    resolution_x = IntegerField('X:', validators=[DataRequired(), NumberRange(min=64)])
+    resolution_y = IntegerField('Y:', validators=[DataRequired(), NumberRange(min=64)])
+    size_x = IntegerField('X:', validators=[DataRequired(), NumberRange(min=1)])
+    size_y = IntegerField('Y:', validators=[DataRequired(), NumberRange(min=1)])
+    field_view = IntegerField('Поле зрения (°):', validators=[DataRequired(), NumberRange(min=1)])
+    host = StringField('Хост:', validators=[DataRequired(), IPAddress()])
+    port = IntegerField('Порт:', validators=[DataRequired(), NumberRange(min=1000, max=9999)])
+
+
 class ParametersForm(FlaskForm):
     scene = SelectField(
-        'Тип сцены',
+        'Тип сцены:',
         choices=[(i.name, i.value) for i in SceneTypes],
         default=SceneTypes.oka.name,
         validators=[DataRequired()],
@@ -35,7 +59,7 @@ class ParametersForm(FlaskForm):
         validators=[DataRequired(), NumberRange(min=1)],
     )
     trajectory_type = SelectField(
-        'Тип траектории',
+        'Тип траектории:',
         choices=[(i.name, i.value) for i in Trajectory],
         default=Trajectory.glissade.name,
         validators=[DataRequired()],
@@ -63,6 +87,15 @@ class ParametersForm(FlaskForm):
     y_target = FloatField('Y (м):', validators=[Optional(), NumberRange(min=0)])
     z_target = FloatField('Z (м):', default=DEFAULT_Z, validators=[Optional(), NumberRange(min=0)])
 
+    # sensors
+    sensors = FieldList(
+        FormField(SensorForm),
+        min_entries=1,
+        max_entries=5,
+        # label="Сенсоры:",
+        validators=[DataRequired()],
+    )
+
     frequency = FloatField(
         'Частота кадров (Герц):',
         default=DEFAULT_FREQUENCY,
@@ -76,5 +109,5 @@ class ParametersForm(FlaskForm):
 
     submit = SubmitField(
         'Запуск',
-        render_kw={'class': 'btn btn-success btn-md'},
+        render_kw={'class': 'btn btn-primary btn-md'},
     )

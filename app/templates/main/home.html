@@ -55,6 +55,44 @@
           </div>
       </div>
 
+      <div class="sensors-block">
+            <p style="font-weight: bold">Сенсоры:</p>
+            <div class="sensor-buttons-container">
+                <div id="add-sensor-btn" class="btn btn-outline-success">Добавить</div>
+                <div id="remove-sensor-btn" class="btn btn-outline-danger">Удалить</div>
+            </div>
+
+            {% for i in parameters_from.sensors %}
+                <hr>
+                <div class="sensor-row">
+                    <div class="row-flex-div name-and-ip">
+                        {{ render_field(i.sensor_name) }}
+                        {{ render_field(i.host) }}
+                        {{ render_field(i.port) }}
+                     </div>
+
+                    <div class="row-flex-div type-and-view">
+                        {{ render_field(i.sensor_type) }}
+                        {{ render_field(i.field_view) }}
+                    </div>
+
+                    <p style="margin-bottom: 10px;">Разрешение (пиксел):</p>
+                    <div class="row-flex-div resolution">
+                        {{ render_field(i.resolution_x) }}
+                        {{ render_field(i.resolution_y) }}
+                     </div>
+
+                    <p style="margin-bottom: 10px;">Размер (мм):</p>
+                    <div class="row-flex-div sizes">
+                        {{ render_field(i.size_x) }}
+                        {{ render_field(i.size_y) }}
+                     </div>
+                    <hr>
+                </div>
+            {% endfor %}
+        </div>
+
+
       {{ render_field(parameters_from.frequency) }}
       {{ render_field(parameters_from.velocity) }}
       {{ render_field(parameters_from.submit) }}
@@ -65,4 +103,5 @@
 {% block scripts %}
     {{ super()}}
     <script src="{{ url_for('static', filename='js/check_trajectory.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/add_and_delete_sensors.js') }}"></script>
 {% endblock %}

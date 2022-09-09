@@ -29,3 +29,50 @@
 .diameters .form-group:first-child, .heights .form-group:first-child {
     margin-right: 22%;
 }
+
+.sensors-block, .ellipse-block, .glyssade-block {
+    margin: 20px 0;
+    padding: 20px;
+    border: 1px solid black;
+    border-radius: 15px;
+}
+
+.sensor-buttons-container {
+    margin: 20px 0;
+}
+
+.resolution, .sizes, .name-and-ip, .type-and-view {
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+.resolution .form-group, .sizes .form-group {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.resolution .form-group label, .sizes .form-group label {
+    margin-right: 10px;
+}
+
+.resolution .form-group:first-child,
+.sizes .form-group:first-child,
+.name-and-ip .form-group:first-child,
+.type-and-view .form-group:first-child {
+    margin-right: 10px;
+}
+
+.resolution .form-group:last-child,
+.sizes .form-group:last-child,
+.ip-address .form-group:last-child,
+.name-and-ip .form-group:last-child,
+.type-and-view .form-group:last-child {
+    margin-left: 10px;
+}
+
+
+.sensor-row > p {
+    margin: 0;
+}
