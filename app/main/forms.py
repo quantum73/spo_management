@@ -1,7 +1,9 @@
 from enum import Enum
 
 from flask_wtf import FlaskForm
-from wtforms import validators, StringField, FloatField, SubmitField, SelectField, IntegerField, FieldList, FormField
+from flask_wtf.file import FileAllowed
+from wtforms import validators, StringField, FloatField, SubmitField, SelectField, IntegerField, FieldList, FormField, \
+    FileField
 
 DEFAULT_Z = 10
 DEFAULT_SAMPLES_COUNT = 10
@@ -27,7 +29,18 @@ class Trajectory(Enum):
     ellipse = "Эллипс"
 
 
-class SensorForm(FlaskForm):
+class InputJSONForm(FlaskForm):
+    from_json = FileField(
+        '',
+        validators=[validators.DataRequired(), FileAllowed(['json'], 'JSON only!')],
+        render_kw={
+            'accept': 'application/JSON',
+            'class': 'from-json-field',
+        },
+    )
+
+
+class SensorForm(InputJSONForm, FlaskForm):
     sensor_name = StringField('Название:', validators=[validators.DataRequired(), validators.Length(min=3, max=64)])
     sensor_type = SelectField(
         'Тип сенсора:',
@@ -42,6 +55,14 @@ class SensorForm(FlaskForm):
     field_view = IntegerField('Поле зрения (°):', validators=[validators.DataRequired(), validators.NumberRange(min=0)])
     host = StringField('Хост:', validators=[validators.DataRequired(), validators.IPAddress()])
     port = IntegerField('Порт:', validators=[validators.DataRequired(), validators.NumberRange(min=1000, max=9999)])
+    clear_sensor = SubmitField(
+        'Очистить',
+        validators=[validators.Optional()],
+        render_kw={
+            'class': 'btn btn-danger btn-md clear-sensor-btn',
+            'type': 'button',
+        },
+    )
 
 
 class ParametersForm(FlaskForm):

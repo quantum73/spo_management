@@ -72,32 +72,35 @@
         </div>
 
         {% for i in parameters_from.sensors %}
-        <hr>
-        <div class="sensor-row">
-            <div class="row-flex-div name-and-ip">
-                {{ render_field(i.sensor_name) }}
-                {{ render_field(i.host) }}
-                {{ render_field(i.port) }}
-            </div>
-
-            <div class="row-flex-div type-and-view">
-                {{ render_field(i.sensor_type) }}
-                {{ render_field(i.field_view) }}
-            </div>
-
-            <p style="margin-bottom: 10px;">Разрешение (пиксел):</p>
-            <div class="row-flex-div resolution">
-                {{ render_field(i.resolution_x) }}
-                {{ render_field(i.resolution_y) }}
-            </div>
-
-            <p style="margin-bottom: 10px;">Размер (мм):</p>
-            <div class="row-flex-div sizes">
-                {{ render_field(i.size_x) }}
-                {{ render_field(i.size_y) }}
-            </div>
             <hr>
-        </div>
+            <div class="sensor-row">
+                <div class="row-flex-div name-and-ip">
+                    {{ render_field(i.sensor_name) }}
+                    {{ render_field(i.host) }}
+                    {{ render_field(i.port) }}
+                </div>
+
+                <div class="row-flex-div type-and-view">
+                    {{ render_field(i.sensor_type) }}
+                    {{ render_field(i.field_view) }}
+                </div>
+
+                <p style="margin-bottom: 10px;">Разрешение (пиксел):</p>
+                <div class="row-flex-div resolution">
+                    {{ render_field(i.resolution_x) }}
+                    {{ render_field(i.resolution_y) }}
+                </div>
+
+                <p style="margin-bottom: 10px;">Размер (мм):</p>
+                <div class="row-flex-div sizes">
+                    {{ render_field(i.size_x) }}
+                    {{ render_field(i.size_y) }}
+                </div>
+
+                {{ render_field(i.from_json) }}
+                {{ render_field(i.clear_sensor) }}
+                <hr>
+            </div>
         {% endfor %}
     </div>
 

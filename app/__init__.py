@@ -1,11 +1,13 @@
 from flask import Flask
 from flask_bootstrap import Bootstrap4
+from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf.csrf import CSRFProtect
 
 from config import config
 
 csrf = CSRFProtect()
+cors = CORS(origins=["localhost:7373", "127.0.0.1:7373", "0.0.0.0:7373"])
 bootstrap = Bootstrap4()
 db = SQLAlchemy()
 
@@ -16,6 +18,7 @@ def create_app(config_name):
     config[config_name].init_app(app)
 
     csrf.init_app(app)
+    cors.init_app(app)
     bootstrap.init_app(app)
     db.init_app(app)
 

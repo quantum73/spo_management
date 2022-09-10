@@ -26,6 +26,10 @@
     justify-content: space-between;
 }
 
+.clear-sensor-btn {
+    margin: 10px 0;
+}
+
 .main-block, .sensors-block, .ellipse-block, .glyssade-block, #map {
     margin: 20px 0;
     padding: 20px;
