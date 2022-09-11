@@ -7,6 +7,12 @@ function create_map_with_line() {
         zoom: 14
     });
 
+    var points_count = 1;
+    $("#start_x_target").val(null);
+    $("#start_y_target").val(null);
+    $("#finish_x_target").val(null);
+    $("#finish_y_target").val(null);
+
     // GeoJSON object to hold our measurement features
     var geojson = {
         'type': 'FeatureCollection',
@@ -65,6 +71,16 @@ function create_map_with_line() {
 
             // If a feature was clicked, remove it from the map
             if (features.length) {
+                var remove_id = features[0].properties.extra_id;
+                if (remove_id === 1) {
+                    $("#start_x_target").val(null);
+                    $("#start_y_target").val(null);
+                } else if (remove_id === 2) {
+                    $("#finish_x_target").val(null);
+                    $("#finish_y_target").val(null);
+                }
+                points_count -= 1;
+
                 var id = features[0].properties.id;
                 geojson.features = geojson.features.filter(function (point) {
                     return point.properties.id !== id;
@@ -77,18 +93,20 @@ function create_map_with_line() {
                         'coordinates': [e.lngLat.lng, e.lngLat.lat]
                     },
                     'properties': {
-                        'id': String(new Date().getTime())
+                        'id': String(new Date().getTime()),
+                        'extra_id': points_count
                     }
                 };
-                geojson.features.push(point);
-
-                if (geojson.features.length === 1) {
+                if (points_count === 1) {
                     $("#start_x_target").val(e.lngLat.lng);
                     $("#start_y_target").val(e.lngLat.lat);
-                } else if (geojson.features.length === 2) {
+                } else if (points_count === 2) {
                     $("#finish_x_target").val(e.lngLat.lng);
                     $("#finish_y_target").val(e.lngLat.lat);
                 }
+
+                geojson.features.push(point);
+                points_count += 1;
             }
 
             if (geojson.features.length > 1) {
