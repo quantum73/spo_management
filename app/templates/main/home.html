@@ -60,9 +60,7 @@
         </div>
     </div>
 
-    <div class="map-container">
-        <div id="map"></div>
-    </div>
+    <div id="map"></div>
 
     <div class="sensors-block">
         <p style="font-weight: bold">Сенсоры:</p>
@@ -113,27 +111,4 @@
     {{ super()}}
     <script src="{{ url_for('static', filename='js/check_trajectory.js') }}"></script>
     <script src="{{ url_for('static', filename='js/add_and_delete_sensors.js') }}"></script>
-    <script>
-        var map = new maplibregl.Map({
-            container: 'map',
-            style:
-                'https://api.maptiler.com/maps/streets/style.json?key=get_your_own_OpIi9ZULNHzrESv6T2vL',
-            center: [0, 0],
-            zoom: 2
-        });
-
-        var marker = new maplibregl.Marker({
-            draggable: true
-        })
-            .setLngLat([0, 0])
-            .addTo(map);
-
-        function onDragEnd() {
-            var lngLat = marker.getLngLat();
-            $( "#x_target" ).val( lngLat.lng );
-            $( "#y_target" ).val( lngLat.lat );
-        }
-
-        marker.on('dragend', onDragEnd);
-    </script>
 {% endblock %}

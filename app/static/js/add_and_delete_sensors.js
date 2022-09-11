@@ -67,12 +67,14 @@ $(add_btn).click(function () {
             $(v).attr("id", new_id_value);
             $(v).attr("name", new_name_value);
         });
-
         // Rename for attribute into labels
         clone_sensor.find("label").each(function (i, v) {
             let new_id_value = $(v).attr("for").replace(/-\d-/, `-${length}-`);
             $(v).attr("for", new_id_value);
         });
+        // Hide clear button and show input for json autofill
+        clone_sensor.find(":input.clear-sensor-btn").hide();
+        clone_sensor.find(":input.from-json-field").parent().show();
 
         change_json_field(clone_sensor);
         click_clear_button(clone_sensor);

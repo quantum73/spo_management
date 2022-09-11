@@ -77,12 +77,9 @@
     margin: 0;
 }
 
-.map-container {
-    padding: 0;
-    margin: 20px 0;
-}
-
 #map {
+    margin: 0;
+    padding: 0;
     height: 500px;
     width: 100%;
 }
