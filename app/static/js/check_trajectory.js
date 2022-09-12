@@ -86,27 +86,29 @@ function create_map_with_line() {
                     return point.properties.id !== id;
                 });
             } else {
-                var point = {
-                    'type': 'Feature',
-                    'geometry': {
-                        'type': 'Point',
-                        'coordinates': [e.lngLat.lng, e.lngLat.lat]
-                    },
-                    'properties': {
-                        'id': String(new Date().getTime()),
-                        'extra_id': points_count
+                if (geojson.features.length < 2) {
+                        var point = {
+                        'type': 'Feature',
+                        'geometry': {
+                            'type': 'Point',
+                            'coordinates': [e.lngLat.lng, e.lngLat.lat]
+                        },
+                        'properties': {
+                            'id': String(new Date().getTime()),
+                            'extra_id': points_count
+                        }
+                    };
+                    if (points_count === 1) {
+                        $("#start_x_target").val(e.lngLat.lng);
+                        $("#start_y_target").val(e.lngLat.lat);
+                    } else if (points_count === 2) {
+                        $("#finish_x_target").val(e.lngLat.lng);
+                        $("#finish_y_target").val(e.lngLat.lat);
                     }
-                };
-                if (points_count === 1) {
-                    $("#start_x_target").val(e.lngLat.lng);
-                    $("#start_y_target").val(e.lngLat.lat);
-                } else if (points_count === 2) {
-                    $("#finish_x_target").val(e.lngLat.lng);
-                    $("#finish_y_target").val(e.lngLat.lat);
-                }
 
-                geojson.features.push(point);
-                points_count += 1;
+                    geojson.features.push(point);
+                    points_count += 1;
+                }
             }
 
             if (geojson.features.length > 1) {
