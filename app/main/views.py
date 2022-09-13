@@ -14,6 +14,7 @@ def home():
     parameters_from = ParametersForm()
     if parameters_from.validate_on_submit():
         print(parameters_from.data)
+        # TODO: Какая-то логика передачи данных на отрисовку
         return redirect(url_for('main.results'))
 
     return render_template("main/home.html", parameters_from=parameters_from), 200

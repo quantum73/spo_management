@@ -26,7 +26,7 @@
     height: 64px;
 }
 
-.home-link-header .home-link {
+.home-link-header, .results-link-header, .home-link {
     margin: 0;
     padding: 0;
 }
@@ -142,4 +142,8 @@ input[type="file"] {
 
 #go-btn {
     padding: 10px 20px;
+}
+
+nav {
+    background-color: black;
 }

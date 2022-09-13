@@ -18,13 +18,13 @@
     </head>
     <body>
         {% from 'bootstrap4/nav.html' import render_nav_item %}
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #101010">
             <div class="row-flex-div navbar-links-container">
                 <div class="row-flex-div home-link-container">
                     <img class="d-inline-block align-top spo-icon" src="{{ url_for('static', filename='icons/main-icon.png') }}" alt="">
                     <h5 class="nav-link home-link-header"><a class="home-link" href="{{ url_for('main.home') }}">СПО "Управление"</a></h5>
                 </div>
-                <a class="nav-link result-link" href="{{ url_for('main.results') }}">Результаты</a>
+                <h5 class="nav-link results-link-header"><a class="nav-link result-link" href="{{ url_for('main.results') }}">Результаты</a></h5>
             </div>
         </nav>
 
