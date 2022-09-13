@@ -21,13 +21,13 @@
     justify-content: center;
 }
 
-.home-link-header {
-    margin: 0;
-    padding: 0;
+.home-link-container img {
+    width: 64px;
+    height: 64px;
 }
 
-.home-link {
-    margin: 0 10px;
+.home-link-header .home-link {
+    margin: 0;
     padding: 0;
 }
 
@@ -37,6 +37,7 @@
 
 .home-link:hover {
     color: deepskyblue;
+    text-decoration: none;
 }
 
 .result-link:hover {
@@ -46,6 +47,21 @@
 .spo-icon {
     width: 30px;
     height: 30px;
+}
+
+.sensor-buttons-container {
+    margin: 20px 0;
+    justify-content: flex-start;
+}
+
+.sensor-buttons-container .spo-icon {
+    width: 48px;
+    height: 48px;
+}
+
+.sensor-buttons-container .spo-icon:hover {
+    cursor: pointer;
+    background-color: gray;
 }
 
 .diameters-heights {
@@ -61,10 +77,6 @@
     padding: 20px;
     border: 1px solid black;
     border-radius: 15px;
-}
-
-.sensor-buttons-container {
-    margin: 20px 0;
 }
 
 .resolution, .sizes, .name-and-ip, .type-and-view {
@@ -108,4 +120,26 @@
     padding: 0;
     height: 500px;
     width: 100%;
+}
+
+.sensor-row-buttons-container {
+    justify-content: flex-start;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+.from-json-label {
+    margin: 0 10px 0 0;
+    cursor: pointer;
+}
+
+.go-btn-container {
+    justify-content: center;
+    align-items: center;
+}
+
+#go-btn {
+    padding: 10px 20px;
 }

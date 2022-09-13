@@ -31,7 +31,7 @@ class Trajectory(Enum):
 
 class InputJSONForm(FlaskForm):
     from_json = FileField(
-        '',
+        'Заполнить',
         validators=[validators.DataRequired(), FileAllowed(['json'], 'JSON only!')],
         render_kw={
             'accept': 'application/JSON',
@@ -128,5 +128,8 @@ class ParametersForm(FlaskForm):
 
     submit = SubmitField(
         'Запуск',
-        render_kw={'class': 'btn btn-primary btn-md'},
+        render_kw={
+            "id": "go-btn",
+            "class": "btn btn-info",
+        },
     )

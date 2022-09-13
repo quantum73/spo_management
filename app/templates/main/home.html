@@ -62,9 +62,13 @@
 
         <div class="sensors-block">
             <p style="font-weight: bold">Сенсоры:</p>
-            <div class="sensor-buttons-container">
-                <div id="add-sensor-btn" class="btn btn-success">Добавить</div>
-                <div id="remove-sensor-btn" class="btn btn-danger">Удалить</div>
+            <div class="sensor-buttons-container row-flex-div">
+                <div id="add-sensor-btn">
+                    <img class="d-inline-block align-top spo-icon" src="{{ url_for('static', filename='icons/plus-icon.png') }}" alt="">
+                </div>
+                <div id="remove-sensor-btn">
+                    <img class="d-inline-block align-top spo-icon" src="{{ url_for('static', filename='icons/minus-icon.png') }}" alt="">
+                </div>
             </div>
 
             {% for i in parameters_from.sensors %}
@@ -93,14 +97,20 @@
                         {{ render_field(i.size_y) }}
                     </div>
 
-                    {{ render_field(i.from_json) }}
-                    {{ render_field(i.clear_sensor) }}
+                    <div class="row-flex-div sensor-row-buttons-container">
+                        {{ i.from_json.label(class_="form-control-label btn btn-primary from-json-label") }}
+                        {{ i.from_json }}
+                        {{ render_field(i.clear_sensor) }}
+                    </div>
                     <hr>
+
                 </div>
             {% endfor %}
         </div>
 
-        {{ render_field(parameters_from.submit) }}
+        <div class="row-flex-div go-btn-container">
+            {{ render_field(parameters_from.submit) }}
+        </div>
     </form>
 
 {% endblock %}

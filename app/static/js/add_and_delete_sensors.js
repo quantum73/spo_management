@@ -33,20 +33,16 @@ function change_json_field(clone) {
     clone.find(':input').not(':input[type=button], select').val(null);
     clone.find(':input.from-json-field').change(function () {
         send_json_data($(this), clone);
-        $(this).parent().hide();
-        $(this).parent().parent().find(":input.clear-sensor-btn").show();
     });
 }
 
 function click_clear_button(clone) {
     clone.find(':input.clear-sensor-btn').click(function () {
-        $(this).parent().find(':input').not(':input[type=button], select').val(null);
-        $(this).hide();
-        $(this).parent().find(":input.from-json-field").parent().show();
+        $(this).parent().parent().find(':input').not(':input[type=button], select').val(null);
     });
 }
 
-$(".clear-sensor-btn:first").hide();
+// $(".clear-sensor-btn:first").hide();
 let first_sensor_row = $(".sensor-row:first");
 change_json_field(first_sensor_row);
 click_clear_button(first_sensor_row);
@@ -72,9 +68,6 @@ $(add_btn).click(function () {
             let new_id_value = $(v).attr("for").replace(/-\d-/, `-${length}-`);
             $(v).attr("for", new_id_value);
         });
-        // Hide clear button and show input for json autofill
-        clone_sensor.find(":input.clear-sensor-btn").hide();
-        clone_sensor.find(":input.from-json-field").parent().show();
 
         change_json_field(clone_sensor);
         click_clear_button(clone_sensor);
