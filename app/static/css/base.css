@@ -3,23 +3,49 @@
     margin-bottom: 2em;
 }
 
-.my-navbar {
-    justify-content: center;
-}
-
-.nav-link {
-    color: white;
-}
-
-.nav-link:hover {
-    color: greenyellow;
-}
-
 .row-flex-div {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+}
+
+.navbar-links-container {
+    width: 100%;
+    padding: 0 20px;
+    justify-content: space-between;
+}
+
+.home-link-container {
+    align-items: center;
+    justify-content: center;
+}
+
+.home-link-header {
+    margin: 0;
+    padding: 0;
+}
+
+.home-link {
+    margin: 0 10px;
+    padding: 0;
+}
+
+.result-link, .home-link {
+    color: white;
+}
+
+.home-link:hover {
+    color: deepskyblue;
+}
+
+.result-link:hover {
+    color: greenyellow;
+}
+
+.spo-icon {
+    width: 30px;
+    height: 30px;
 }
 
 .diameters-heights {

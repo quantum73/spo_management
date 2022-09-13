@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}Результаты{% endblock %}
+
+{% block page_content %}
+    <table class="table table-bordered">
+        <thead class="thead-dark">
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Название</th>
+            <th scope="col">Дата создания</th>
+            <th scope="col">Ссылка</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <th scope="row">1</th>
+            <td>Выборка ГОЭС</td>
+            <td>{{ now_date }}</td>
+            <td><a href="#">Скачать</a></td>
+        </tr>
+        </tbody>
+    </table>
+{% endblock %}
