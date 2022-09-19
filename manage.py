@@ -39,6 +39,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--host", required=False, default="127.0.0.1", type=str)
     parser.add_argument("--port", required=False, default=5000, type=int)
+    parser.add_argument("--debug", required=False, action='store_true')
     args = parser.parse_args()
 
-    application.run(host=args.host, port=args.port)
+    application.run(host=args.host, port=args.port, debug=args.debug)
