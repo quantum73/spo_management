@@ -13,7 +13,7 @@ function send_json_data(json_field, form_field) {
     let name_prefix = $(json_field).attr("name").replace("from_json", "");
     fd.append('from_json', json_file);
     $.ajax({
-        url: 'http://127.0.0.1:7373/check-json/',
+        url: '/check-json/',
         type: "POST",
         data: fd,
         success: function (data) {

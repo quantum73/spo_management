@@ -133,3 +133,4 @@ dmypy.json
 *.pdf
 
 report/
+./*.json

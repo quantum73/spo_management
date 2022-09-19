@@ -7,7 +7,7 @@ from flask_wtf.csrf import CSRFProtect
 from config import config
 
 csrf = CSRFProtect()
-cors = CORS(origins=["localhost:7373", "127.0.0.1:7373", "0.0.0.0:7373"])
+cors = CORS(origins=["localhost", "127.0.0.1", "0.0.0.0"])
 bootstrap = Bootstrap4()
 db = SQLAlchemy()
 
