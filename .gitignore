@@ -131,6 +131,5 @@ dmypy.json
 # Custom
 .idea
 *.pdf
-
+*.json
 report/
-./*.json
