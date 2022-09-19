@@ -1,7 +1,8 @@
 import datetime
 import json
+import os
 
-from flask import render_template, redirect, url_for, jsonify
+from flask import render_template, redirect, url_for, jsonify, current_app, send_from_directory
 from flask_cors import cross_origin
 
 from . import main
@@ -34,3 +35,9 @@ def results():
     now = datetime.datetime.now()
     str_now = now.strftime("%H:%M %d.%m.%Y")
     return render_template("main/results.html", now_date=str_now), 200
+
+
+@main.route('/favicon.ico')
+def favicon():
+    favicon_dir = os.path.join(current_app.config.get("STATIC_FOLDER"), "icons")
+    return send_from_directory(favicon_dir, 'favicon.ico', mimetype='image/vnd.microsoft.icon')
