@@ -1,13 +1,16 @@
-import datetime
 import json
 import os
+import uuid
 
 import requests
-from flask import render_template, redirect, url_for, jsonify, current_app, send_from_directory, alert
+from flask import render_template, redirect, url_for, jsonify, current_app, send_from_directory
 from flask_cors import cross_origin
+from sqlalchemy import desc
 
 from . import main
 from .forms import ParametersForm, InputJSONForm
+from .. import db
+from ..models import Result
 
 
 @main.route('/', methods=['GET', 'POST'])
@@ -22,18 +25,36 @@ def home():
             full_data.update(sensor)
             host = sensor.get("host")
             port = sensor.get("port")
-            response = requests.post(
-                "http://{}:{}/run/".format(host, port),
-                json=full_data,
-            )
-            if response.status_code == 200:
-                # TODO: Получение URL для скачивания выборки
-                print(response.json())
+            try:
+                response = requests.post(
+                    "http://{}:{}/run/".format(host, port),
+                    json=full_data,
+                    timeout=1,
+                )
+            except Exception as e:
+                is_ok_flag = False
+                result_content = e.__class__.__name__
             else:
-                alert("Непредвиденная ошибка. Введите данные заново.")
-                break
+                if response.status_code == 200:
+                    # TODO: Получение URL для скачивания выборки
+                    data = response.json()
+                    is_ok_flag = True
+                    result_content = "http://{}:{}/download/{}/".format(host, port, uuid.uuid4())
+                    # result_content = data.get("download_url")
+                else:
+                    is_ok_flag = False
+                    result_content = f"Error: {response.status_code}"
+
+            result = Result(
+                title=full_data.get("title"),
+                host=f"{host}:{port}",
+                is_ok=is_ok_flag,
+                content=result_content,
+            )
+            db.session.add(result)
+            db.session.commit()
         else:
-            return redirect(url_for('main.results'))
+            return redirect(url_for('main.get_results'))
 
     return render_template("main/home.html", parameters_from=parameters_from), 200
 
@@ -48,10 +69,9 @@ def check_json():
 
 
 @main.route('/results/', methods=['GET'])
-def results():
-    now = datetime.datetime.now()
-    str_now = now.strftime("%H:%M %d.%m.%Y")
-    return render_template("main/results.html", now_date=str_now), 200
+def get_results():
+    results = Result.query.order_by(desc(Result.created_at)).all()
+    return render_template("main/results.html", results=results), 200
 
 
 @main.route('/favicon.ico')

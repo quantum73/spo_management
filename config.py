@@ -10,6 +10,7 @@ class Config:
     STATIC_PATH = os.environ.get('STATIC_PATH', "")
     STATIC_FOLDER = os.environ.get('STATIC_URL', os.path.join(basedir, "app", "static"))
     TEMPLATE_FOLDER = os.environ.get('TEMPLATE_FOLDER', os.path.join(basedir, "app", "templates"))
+    SQLALCHEMY_COMMIT_ON_TEARDOWN = True
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     @classmethod

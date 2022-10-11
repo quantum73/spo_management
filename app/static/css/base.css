@@ -35,6 +35,10 @@
     color: white;
 }
 
+.result-download-link {
+    color: greenyellow;
+}
+
 .home-link:hover {
     color: deepskyblue;
     text-decoration: none;

@@ -32,7 +32,7 @@ class Trajectory(Enum):
 class InputJSONForm(FlaskForm):
     from_json = FileField(
         'Заполнить',
-        validators=[validators.DataRequired(), FileAllowed(['json'], 'JSON only!')],
+        validators=[validators.Optional(), FileAllowed(['json'], 'JSON only!')],
         render_kw={
             'accept': 'application/JSON',
             'class': 'from-json-field',

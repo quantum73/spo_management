@@ -8,17 +8,25 @@
         <tr>
             <th scope="col">#</th>
             <th scope="col">Название</th>
+            <th scope="col">Хост</th>
             <th scope="col">Дата создания</th>
-            <th scope="col">Ссылка</th>
+            <th scope="col">Результат</th>
         </tr>
         </thead>
         <tbody>
-        <tr>
-            <th scope="row">1</th>
-            <td>Выборка ГОЭС</td>
-            <td>{{ now_date }}</td>
-            <td><a href="#">Скачать</a></td>
-        </tr>
+        {% for result in results %}
+            <tr>
+                <th scope="row">{{ result.id }}</th>
+                <td>{{ result.title }}</td>
+                <td>{{ result.host }}</td>
+                <td>{{ result.created_at }}</td>
+                {% if result.is_ok %}
+                    <td><a class="result-download-link" href="{{ result.content }}">Скачать</a></td>
+                {% else %}
+                    <td style="color: red; font-weight: bold;">{{ result.content }}</td>
+                {% endif %}
+            </tr>
+        {% endfor %}
         </tbody>
     </table>
 {% endblock %}
