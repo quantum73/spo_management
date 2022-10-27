@@ -2,8 +2,7 @@ from enum import Enum
 
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileAllowed
-from wtforms import validators, StringField, FloatField, SubmitField, SelectField, IntegerField, FieldList, FormField, \
-    FileField
+from wtforms import validators, StringField, FloatField, SubmitField, SelectField, IntegerField, FileField
 
 DEFAULT_Z = 10
 DEFAULT_SAMPLES_COUNT = 10
@@ -40,32 +39,7 @@ class InputJSONForm(FlaskForm):
     )
 
 
-class SensorForm(InputJSONForm, FlaskForm):
-    sensor_name = StringField('Название:', validators=[validators.DataRequired(), validators.Length(min=3, max=64)])
-    sensor_type = SelectField(
-        'Тип сенсора:',
-        choices=[(s.name, s.value) for s in SensorTypes],
-        default=SensorTypes.IR.name,
-        validators=[validators.DataRequired()],
-    )
-    resolution_x = IntegerField('X:', validators=[validators.DataRequired(), validators.NumberRange(min=1)])
-    resolution_y = IntegerField('Y:', validators=[validators.DataRequired(), validators.NumberRange(min=1)])
-    size_x = IntegerField('X:', validators=[validators.DataRequired(), validators.NumberRange(min=1)])
-    size_y = IntegerField('Y:', validators=[validators.DataRequired(), validators.NumberRange(min=1)])
-    field_view = IntegerField('Поле зрения (°):', validators=[validators.DataRequired(), validators.NumberRange(min=0)])
-    host = StringField('Хост:', validators=[validators.DataRequired(), validators.IPAddress()])
-    port = IntegerField('Порт:', validators=[validators.DataRequired(), validators.NumberRange(min=1000, max=9999)])
-    clear_sensor = SubmitField(
-        'Очистить',
-        validators=[validators.Optional()],
-        render_kw={
-            'class': 'btn btn-danger btn-md clear-sensor-btn',
-            'type': 'button',
-        },
-    )
-
-
-class ParametersForm(FlaskForm):
+class ParametersForm(InputJSONForm, FlaskForm):
     scene = SelectField(
         'Тип сцены:',
         choices=[(i.name, i.value) for i in SceneTypes],
@@ -107,12 +81,29 @@ class ParametersForm(FlaskForm):
     y_target = FloatField('Y (м):', validators=[validators.Optional()])
     z_target = FloatField('Z (м):', default=DEFAULT_Z, validators=[validators.Optional()])
 
-    # sensors
-    sensors = FieldList(
-        FormField(SensorForm),
-        min_entries=1,
-        max_entries=5,
+    # sensor
+    sensor_name = StringField('Название:', validators=[validators.DataRequired(), validators.Length(min=3, max=64)])
+    sensor_type = SelectField(
+        'Тип сенсора:',
+        choices=[(s.name, s.value) for s in SensorTypes],
+        default=SensorTypes.IR.name,
         validators=[validators.DataRequired()],
+    )
+    resolution_x = IntegerField('X:', validators=[validators.DataRequired(), validators.NumberRange(min=1)])
+    resolution_y = IntegerField('Y:', validators=[validators.DataRequired(), validators.NumberRange(min=1)])
+    size_x = IntegerField('X:', validators=[validators.DataRequired(), validators.NumberRange(min=1)])
+    size_y = IntegerField('Y:', validators=[validators.DataRequired(), validators.NumberRange(min=1)])
+    field_view = IntegerField('Поле зрения (°):', validators=[validators.DataRequired(), validators.NumberRange(min=0)])
+    host = StringField('Хост:', default="10.24.50.4", validators=[validators.DataRequired(), validators.IPAddress()])
+    port = IntegerField('Порт:', default=4545,
+                        validators=[validators.DataRequired(), validators.NumberRange(min=1000, max=9999)])
+    clear_sensor = SubmitField(
+        'Очистить',
+        validators=[validators.Optional()],
+        render_kw={
+            'class': 'btn btn-danger btn-md clear-sensor-btn',
+            'type': 'button',
+        },
     )
 
     frequency = FloatField(

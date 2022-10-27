@@ -1,16 +1,35 @@
 import json
 import os
-import uuid
+import socket
+from multiprocessing import Process
 
-import requests
 from flask import render_template, redirect, url_for, jsonify, current_app, send_from_directory
 from flask_cors import cross_origin
 from sqlalchemy import desc
 
+from manage import curr_app
 from . import main
+from .dataset_task import CreateDatasetTask, TaskResponse
 from .forms import ParametersForm, InputJSONForm
 from .. import db
 from ..models import Result
+
+
+def run_task(result_id: int, host: str, port: int, form_data: dict) -> None:
+    try:
+        runner = CreateDatasetTask(ip=host, port=port, params=form_data)
+        res = runner.run()
+    except socket.error as socket_err:
+        print(">>> [SOCKET ERROR]: ", socket_err)
+        res = TaskResponse()
+        res.content = socket_err.__class__.__name__
+
+    is_ok_flag = True if res.status == "OK" else False
+    with curr_app.app_context():
+        Result.query.filter_by(id=result_id).update(
+            dict(is_ok=is_ok_flag, content=res.content)
+        )
+        db.session.commit()
 
 
 @main.route('/', methods=['GET', 'POST'])
@@ -18,43 +37,29 @@ from ..models import Result
 def home():
     parameters_from = ParametersForm()
     if parameters_from.validate_on_submit():
-        full_data = parameters_from.data
-        full_data.pop("sensors")
+        form_data = parameters_from.data
+        title = form_data.get("title")
+        scene = form_data.get("scene").upper()
+        host = form_data.get("host")
+        port = form_data.get("port")
+        result = Result(
+            title="{0} [{1}]".format(title, scene),
+            host=f"{host}:{port}",
+            content="PROCESSING",
+        )
+        db.session.add(result)
+        db.session.commit()
 
-        for sensor in parameters_from.sensors.data:
-            full_data.update(sensor)
-            host = sensor.get("host")
-            port = sensor.get("port")
-            try:
-                response = requests.post(
-                    "http://{}:{}/run/".format(host, port),
-                    json=full_data,
-                    timeout=1,
-                )
-            except Exception as e:
-                is_ok_flag = False
-                result_content = e.__class__.__name__
-            else:
-                if response.status_code == 200:
-                    # TODO: Получение URL для скачивания выборки
-                    data = response.json()
-                    is_ok_flag = True
-                    result_content = "http://{}:{}/download/{}/".format(host, port, uuid.uuid4())
-                    # result_content = data.get("download_url")
-                else:
-                    is_ok_flag = False
-                    result_content = f"Error: {response.status_code}"
-
-            result = Result(
-                title=full_data.get("title"),
-                host=f"{host}:{port}",
-                is_ok=is_ok_flag,
-                content=result_content,
-            )
-            db.session.add(result)
-            db.session.commit()
-        else:
-            return redirect(url_for('main.get_results'))
+        func_kwargs = {
+            "result_id": result.id,
+            "host": host,
+            "port": port,
+            "form_data": form_data,
+        }
+        process = Process(target=run_task, kwargs=func_kwargs)
+        process.daemon = True
+        process.start()
+        return redirect(url_for('main.get_results'))
 
     return render_template("main/home.html", parameters_from=parameters_from), 200
 

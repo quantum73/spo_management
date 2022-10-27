@@ -61,51 +61,39 @@
         <div id="map"></div>
 
         <div class="sensors-block">
-            <p style="font-weight: bold">Сенсоры:</p>
-            <div class="sensor-buttons-container row-flex-div">
-                <div id="add-sensor-btn">
-                    <img class="d-inline-block align-top spo-icon" src="{{ url_for('static', filename='icons/plus-icon.png') }}" alt="">
+            <p style="font-weight: bold">Сенсор:</p>
+            <hr>
+            <div class="sensor-row">
+                <div class="row-flex-div name-and-ip">
+                    {{ render_field(parameters_from.sensor_name) }}
+                    {{ render_field(parameters_from.host) }}
+                    {{ render_field(parameters_from.port) }}
                 </div>
-                <div id="remove-sensor-btn">
-                    <img class="d-inline-block align-top spo-icon" src="{{ url_for('static', filename='icons/minus-icon.png') }}" alt="">
-                </div>
-            </div>
 
-            {% for i in parameters_from.sensors %}
+                <div class="row-flex-div type-and-view">
+                    {{ render_field(parameters_from.sensor_type) }}
+                    {{ render_field(parameters_from.field_view) }}
+                </div>
+
+                <p style="margin-bottom: 10px;">Разрешение (пиксел):</p>
+                <div class="row-flex-div resolution">
+                    {{ render_field(parameters_from.resolution_x) }}
+                    {{ render_field(parameters_from.resolution_y) }}
+                </div>
+
+                <p style="margin-bottom: 10px;">Размер (мм):</p>
+                <div class="row-flex-div sizes">
+                    {{ render_field(parameters_from.size_x) }}
+                    {{ render_field(parameters_from.size_y) }}
+                </div>
+
+                <div class="row-flex-div sensor-row-buttons-container">
+                    {{ parameters_from.from_json.label(class_="form-control-label btn btn-primary from-json-label") }}
+                    {{ parameters_from.from_json }}
+                    {{ render_field(parameters_from.clear_sensor) }}
+                </div>
                 <hr>
-                <div class="sensor-row">
-                    <div class="row-flex-div name-and-ip">
-                        {{ render_field(i.sensor_name) }}
-                        {{ render_field(i.host) }}
-                        {{ render_field(i.port) }}
-                    </div>
-
-                    <div class="row-flex-div type-and-view">
-                        {{ render_field(i.sensor_type) }}
-                        {{ render_field(i.field_view) }}
-                    </div>
-
-                    <p style="margin-bottom: 10px;">Разрешение (пиксел):</p>
-                    <div class="row-flex-div resolution">
-                        {{ render_field(i.resolution_x) }}
-                        {{ render_field(i.resolution_y) }}
-                    </div>
-
-                    <p style="margin-bottom: 10px;">Размер (мм):</p>
-                    <div class="row-flex-div sizes">
-                        {{ render_field(i.size_x) }}
-                        {{ render_field(i.size_y) }}
-                    </div>
-
-                    <div class="row-flex-div sensor-row-buttons-container">
-                        {{ i.from_json.label(class_="form-control-label btn btn-primary from-json-label") }}
-                        {{ i.from_json }}
-                        {{ render_field(i.clear_sensor) }}
-                    </div>
-                    <hr>
-
-                </div>
-            {% endfor %}
+            </div>
         </div>
 
         <div class="row-flex-div go-btn-container">
@@ -119,4 +107,5 @@
     {{ super()}}
     <script src="{{ url_for('static', filename='js/check_trajectory.js') }}"></script>
     <script src="{{ url_for('static', filename='js/add_and_delete_sensors.js') }}"></script>
+    <!--    <script src="{{ url_for('static', filename='js/fill_json.js') }}"></script>-->
 {% endblock %}
