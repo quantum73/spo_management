@@ -7,6 +7,10 @@ from enum import Enum
 
 import numpy as np
 
+from .. import get_logger
+
+logger = get_logger(__name__)
+
 
 class TaskStatus(Enum):
     OK = "OK"
@@ -27,7 +31,7 @@ class TCPCamClient:
         self.__waiting_cmd = "WAITING"
 
     def connect(self) -> None:
-        print(f">>> [CLIENT SOCKET CONNECT TO {self.__addr}]")
+        logger.info(">>> [CLIENT SOCKET CONNECT TO {}]".format(self.__addr))
         self.__sock.connect(self.__addr)
 
     def get_data(self, bytes_size: int = 1024) -> bytes:
@@ -44,12 +48,12 @@ class TCPCamClient:
         self.__sock.send(struct.pack("%ds" % cmd_length, cmd_to_bytes))
 
     def set_value(self, val: int) -> None:
-        print(">>> [SEND SOME INTEGER VALUE]: {}".format(val))
+        logger.info(">>> [SEND SOME INTEGER VALUE]: {}".format(val))
         self.__sock.send(struct.pack('i', val))
 
     def __del__(self) -> None:
         self.__sock.close()
-        print(">>> [CLIENT SOCKET CLOSED]")
+        logger.info(">>> [CLIENT SOCKET CLOSED]")
 
 
 class CreateDatasetTask:
@@ -128,11 +132,11 @@ class CreateDatasetTask:
         # Получаем размер пути
         path_size = self.__cam_client.get_data(4)
         path_size = int.from_bytes(path_size, signed=True, byteorder="little")
-        print(">>> [PATH SIZE]: ", path_size)
+        logger.info(">>> [PATH SIZE]: {}".format(path_size))
         # Получаем путь до выборки
         dataset_path = self.__cam_client.get_data(path_size)
         dataset_path = dataset_path.decode("utf-8")
-        print(">>> [DATASET PATH]: ", dataset_path)
+        logger.info(">>> [DATASET PATH]: {}".format(dataset_path))
 
         # Строим траекторию
         H0 = int(self.get_H_start() - self.get_interest_point()[2])
@@ -146,7 +150,7 @@ class CreateDatasetTask:
 
         # Отправляем число сэмплов
         full_samples_count = self.get_samples_num() * step_count
-        print(f">>> [FULL SAMPLES COUNT]: {full_samples_count}")
+        logger.info(">>> [FULL SAMPLES COUNT]: {}".format(full_samples_count))
         self.__cam_client.set_value(full_samples_count)
 
         # Отправляем данные по построенной траектории
@@ -160,7 +164,7 @@ class CreateDatasetTask:
             vec = self.normalize(vec)
             vec[:] = [v * step for v in vec]
             for j in range(step_count):
-                print(f">>> [Step {i + 1}_{j + 1}]")
+                logger.info(">>> [STEP]: {}_{}".format(i, j))
                 xc = (x0 + vec[0] * j) * 100
                 yc = (y0 + vec[1] * j) * 100
                 zc = (self.get_H_start() + vec[2] * j) * 100
@@ -170,20 +174,20 @@ class CreateDatasetTask:
                 self.__cam_client.set_pose(coords)
 
         # Проверяем ответный сигнал
-        print(">>> [SEND WAITING COMMAND]")
+        logger.info(">>> [SEND WAITING COMMAND]")
         self.__cam_client.send_waiting_command()
 
-        print(">>> [WAITING ANSWER]")
+        logger.info(">>> [WAITING ANSWER]")
         try:
             answer = self.__cam_client.get_data()
         except socket.timeout as timeout_err:
-            print(">>> [TIMEOUT ERROR]: ", timeout_err)
+            logger.info(">>> [TIMEOUT ERROR]: {}".format(timeout_err))
             response.content = timeout_err.__class__.__name__
         except socket.error as other_err:
-            print(">>> [OTHER ERROR]: ", other_err)
+            logger.info(">>> [OTHER ERROR]: {}".format(other_err))
             response.content = other_err.__class__.__name__
         else:
-            print(">>> [ANSWER]: ", answer)
+            logger.info(">>> [ANSWER]: {}".format(answer))
             if answer == self.__ok_code:
                 response.status = TaskStatus.OK.value
                 response.content = dataset_path
@@ -233,6 +237,6 @@ if __name__ == '__main__':
     try:
         runner = CreateDatasetTask(ip=json_data.get('host'), port=json_data.get('port'), params=json_data)
         res = runner.run()
-        print(res)
+        logger.info(res)
     except socket.error as socket_err:
-        print(">>> [SOCKET ERROR]: ", socket_err)
+        logger.info(">>> [SOCKET ERROR]: {}".format(socket_err))

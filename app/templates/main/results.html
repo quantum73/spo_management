@@ -16,10 +16,10 @@
         <tbody>
         {% for result in results %}
             <tr>
-                <th scope="row">{{ result.id }}</th>
+                <th scope="row">{{ loop.index }}</th>
                 <td>{{ result.title }}</td>
                 <td>{{ result.host }}</td>
-                <td>{{ result.created_at }}</td>
+                <td>{{ result.created_at.strftime('%H:%M:%S %d.%m.%Y') }}</td>
                 {% if result.is_ok %}
                     <td><a class="result-download-link" href="{{ result.content }}">Скачать</a></td>
                 {% else %}

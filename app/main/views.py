@@ -11,8 +11,10 @@ from manage import curr_app
 from . import main
 from .dataset_task import CreateDatasetTask, TaskResponse
 from .forms import ParametersForm, InputJSONForm
-from .. import db
+from .. import db, get_logger
 from ..models import Result
+
+logger = get_logger(__name__)
 
 
 def run_task(result_id: int, host: str, port: int, form_data: dict) -> None:
@@ -20,7 +22,7 @@ def run_task(result_id: int, host: str, port: int, form_data: dict) -> None:
         runner = CreateDatasetTask(ip=host, port=port, params=form_data)
         res = runner.run()
     except socket.error as socket_err:
-        print(">>> [SOCKET ERROR]: ", socket_err)
+        logger.info(">>> [SOCKET ERROR]: {}".format(socket_err))
         res = TaskResponse()
         res.content = socket_err.__class__.__name__
 
